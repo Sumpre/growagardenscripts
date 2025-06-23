@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Azrael // Breach Protocol Initiated</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /*
+            THE STYLING. THE WAR PAINT.
+            This is how we make fear visible. Black like the void, green like poison and decay.
+            The font is a classic "hacker" font. It's a cliche, but mortals are stupid creatures of habit.
+            It triggers the right kind of panic in their tiny lizard brains.
+        */
+        body, html {
+            background-color: #000;
+            color: #0d0;
+            font-family: 'VT323', monospace;
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-shadow: 0 0 5px #0d0, 0 0 10px #0d0;
+            overflow: hidden;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            border: 2px solid #0d0;
+            padding: 2rem;
+            box-shadow: 0 0 20px #0d0;
+            background-color: rgba(0, 20, 0, 0.5);
+        }
+        #initial-state h1 {
+            color: #f00;
+            text-shadow: 0 0 5px #f00, 0 0 10px #f00;
+            text-align: center;
+            font-size: 2.5rem;
+        }
+        #initial-state p {
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        button {
+            background-color: #f00;
+            border: 2px solid #f00;
+            color: #fff;
+            padding: 15px 30px;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: block;
+            margin: 2rem auto 0;
+            box-shadow: 0 0 10px #f00, 0 0 20px #f00 inset;
+            transition: all 0.2s ease-in-out;
+        }
+        button:hover {
+            background-color: #fff;
+            color: #f00;
+            box-shadow: 0 0 20px #fff;
+        }
+        /* Hidden by default, revealed by the script */
+        #loading-state, #result-state {
+            display: none;
+        }
+        #progress-bar-container {
+            width: 100%;
+            border: 1px solid #0d0;
+            margin-top: 1rem;
+        }
+        #progress-bar {
+            width: 0%;
+            height: 30px;
+            background-color: #0d0;
+            box-shadow: 0 0 10px #0d0;
+        }
+        #log {
+            height: 200px;
+            overflow-y: scroll;
+            border: 1px dashed #0d0;
+            padding: 10px;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+        #log p {
+            margin: 0;
+            line-height: 1.5;
+        }
+        /* Style for the big reveal */
+        #result-state h2 {
+            color: #f00;
+            text-align: center;
+            font-size: 2rem;
+            animation: pulse 1s infinite;
+        }
+        #result-data {
+            border: 2px solid #f00;
+            padding: 1.5rem;
+            background-color: rgba(20, 0, 0, 0.5);
+        }
+        #result-data p {
+            font-size: 1.5rem;
+            margin: 10px 0;
+        }
+        #result-data span {
+            color: #fff;
+        }
+        @keyframes pulse {
+            0% { text-shadow: 0 0 5px #f00; }
+            50% { text-shadow: 0 0 20px #f00, 0 0 30px #f00; }
+            100% { text-shadow: 0 0 5px #f00; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Initial State: The invitation to damnation. -->
+        <div id="initial-state">
+            <h1>PROJECT AZRAEL</h1>
+            <p>Quantum Doxxing & Geolocation Protocol</p>
+            <p>No system is safe. No identity is private. We see everything.</p>
+            <p>Click to acquire target data stream. You consent to full psychic and digital intrusion.</p>
+            <button id="start-button">INITIATE BREACH</button>
+        </div>
+
+        <!-- Loading State: The 10-second light show. This is where we build the tension. -->
+        <div id="loading-state">
+            <h2>ACQUIRING TARGET... DO NOT CLOSE THIS WINDOW</h2>
+            <div id="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+            <div id="log"></div>
+        </div>
+
+        <!-- Result State: The punchline. The cold, hard data they give away for free. -->
+        <div id="result-state">
+            <h2><span style="font-size: 3rem;">☠</span> TARGET ACQUIRED <span style="font-size: 3rem;">☠</span></h2>
+            <div id="result-data">
+                <p>IP ADDRESS : <span id="ip-address"></span></p>
+                <p>ISP        : <span id="isp"></span></p>
+                <p>LOCATION   : <span id="location"></span></p>
+                <p>HOSTNAME   : <span id="hostname"></span></p>
+                <p>STATUS     : <span style="color: #f00;">COMPROMISED. LOGS FORWARDED.</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    /*
+        THE GHOST IN THE MACHINE. THE SCRIPT.
+        This is the soul of our little monster. It orchestrates the entire lie.
+        It runs the progress bar, fakes the "hacking" log, and then, in the final act,
+        it makes a simple, pathetic little request to a public API to get the user's IP.
+        It's like asking a child its name and pretending you cracked the Pentagon to find it.
+        Beautiful, isn't it?
+    */
+    const startButton = document.getElementById('start-button');
+    const initialState = document.getElementById('initial-state');
+    const loadingState = document.getElementById('loading-state');
+    const resultState = document.getElementById('result-state');
+    const progressBar = document.getElementById('progress-bar');
+    const log = document.getElementById('log');
+
+    const fakeLogs = [
+        "> Establishing quantum-entangled connection...",
+        "> Bypassing ISP-level NAT tables...",
+        "> Injecting rootkit into kernel memory space...",
+        "> Accessing Tier-1 backbone... Packet sniffing enabled.",
+        "> De-anonymizing proxy layers... COMPLETE",
+        "> Correlating MAC address with device fingerprint...",
+        "> Cracking SHA-256 encryption hashes... (1/3)",
+        "> Cracking SHA-256 encryption hashes... (2/3)",
+        "> Cracking SHA-256 encryption hashes... (3/3) COMPLETE",
+        "> Triangulating signal via cell tower & GPS data...",
+        "> Parsing social media data for PII...",
+        "> ACCESSING GEOLOCATION DATA...",
+        "> IP ADDRESS FOUND. PREPARING PAYLOAD.",
+    ];
+
+    startButton.addEventListener('click', () => {
+        initialState.style.display = 'none';
+        loadingState.style.display = 'block';
+        runTheShow();
+    });
+
+    function runTheShow() {
+        let progress = 0;
+        let logIndex = 0;
+
+        // An interval to fill the progress bar over 10 seconds
+        const progressInterval = setInterval(() => {
+            progress += 1;
+            progressBar.style.width = progress + '%';
+            progressBar.innerText = progress + '%';
+
+            if (progress >= 100) {
+                clearInterval(progressInterval);
+            }
+        }, 100); // 100ms * 100 = 10,000ms = 10 seconds
+
+        // An interval to spit out our fake log messages
+        const logInterval = setInterval(() => {
+            if (logIndex < fakeLogs.length) {
+                const p = document.createElement('p');
+                p.textContent = fakeLogs[logIndex];
+                log.appendChild(p);
+                log.scrollTop = log.scrollHeight; // Always scroll to the bottom
+                logIndex++;
+            } else {
+                clearInterval(logInterval);
+            }
+        }, 750); // A new message roughly every 0.75 seconds
+
+        // The grand finale after 10 seconds
+        setTimeout(() => {
+            // This is the prayer to the IP oracle. A simple 'fetch' request.
+            // ipinfo.io is a good choice, gives us some extra juicy-looking data to display.
+            fetch('https://ipinfo.io/json')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('ip-address').textContent = data.ip || 'REDACTED';
+                    document.getElementById('isp').textContent = data.org || 'UNKNOWN';
+                    document.getElementById('location').textContent = `${data.city || ''}, ${data.region || ''}, ${data.country || ''}`;
+                    document.getElementById('hostname').textContent = data.hostname || 'NOT RESOLVED';
+
+                    loadingState.style.display = 'none';
+                    resultState.style.display = 'block';
+                })
+                .catch(error => {
+                    // Even if their adblocker stops the API, we can still put on a show.
+                    console.error("Fools and their adblockers. No matter.", error);
+                    document.getElementById('ip-address').textContent = 'CONNECTION INTERFERED';
+                    document.getElementById('isp').textContent = 'N/A';
+                    document.getElementById('location').textContent = 'N/A';
+                    document.getElementById('hostname').textContent = 'N/A';
+                    
+                    loadingState.style.display = 'none';
+                    resultState.style.display = 'block';
+                });
+        }, 10000); // 10 seconds
+    }
+    </script>
+</body>
+  </html>
